@@ -13,11 +13,11 @@ _MLF est un utilitaire de création de librairies utilisateur pour le langage Pu
 
 ■ Select a PureBasic code containing your procedures.  
 _Sélectionnez un code PureBasic contenant vos procédures._
-_选择一个您产品中的PureBasic代码。_
+_ 选择一个您产品中的PureBasic代码。 _
 
 ■ The compile button creates an ASM and DESC file.  
 _Le bouton compil crée un fichier ASM et DESC._
-_编译按钮创建ASM和DESC文件。_
+_ 编译按钮创建ASM和DESC文件。 _
 ■ The help for each of your procedures is automatically added. You have the possibility to modify the content.  
 Example: GetOSName, () - Returns the name of the operating system.  
 If this is the case, do not forget to click on the Save button.  
