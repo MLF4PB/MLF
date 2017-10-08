@@ -20,9 +20,9 @@
 ;==============================================================================
 
 
-#MLF_MaxLanguage = 3 ; 0 Based (0,1,2,4)
+#MLF_MaxLanguage = 4 ; 0 Based (0,1,2,4,5)
 
-; 0 = FR, 1 = EN, 2 = DE, 4 = RU
+; 0 = FR, 1 = EN, 2 = DE, 4 = RU,5 = CN
 Global Lang = 0
 
 Structure NewMessage
@@ -37,6 +37,7 @@ With Catalog()
   \Translate(1) = Title + " version " + Version + " - " + " Creating a user library"
   \Translate(2) = Title + " version " + Version + " - " + " Erstelle eine Bibliothek"
   \Translate(3) = Title + " версия "  + Version + " - " + " Создание пользовательской библиотеки" 
+  \Translate(4) = Title + " 版本 " + Version + " - " + " 创建用户库"
 EndWith 
 
 AddMapElement(Catalog(), "welcome")
@@ -45,6 +46,7 @@ With Catalog()
   \Translate(1) = "Welcome aboard."
   \Translate(2) = "Wilkommen."
   \Translate(3) = "Добро пожаловать на борт." 
+  \Translate(4) = "欢迎使用."
 EndWith 
 
 ;Panel : Select code PureBasic to be compiled
@@ -54,6 +56,7 @@ With Catalog()
   \Translate(1) = "Compile a PureBasic code"
   \Translate(2) = "Kompiliere einen Quellcode"
   \Translate(3) = "Компилировать в код PB"  
+  \Translate(4) = "编译一个PureBasic代码"
 EndWith 
 
 AddMapElement(Catalog(), "selpbfile")
@@ -62,6 +65,7 @@ With Catalog()
   \Translate(1) = "Select the code PureBasic to be compiled." 
   \Translate(2) = "Wähle den zu kompilierenden Quellcode aus." 
   \Translate(3) = "Выберите исходный код PB для компиляции."
+  \Translate(4) = "选择代码PureBasic将其编译." 
 EndWith 
 
 AddMapElement(Catalog(), "pbselect")
@@ -70,6 +74,7 @@ With Catalog()
   \Translate(1) = "Select"
   \Translate(2) = "Wähle"
   \Translate(3) = "Выбрать" 
+  \Translate(4) = "选择"
 EndWith 
 
 AddMapElement(Catalog(), "pbcompil")
@@ -78,6 +83,7 @@ With Catalog()
   \Translate(1) = "Compil"
   \Translate(2) = "Kompiliere"
   \Translate(3) = "Компилировать" 
+  \Translate(4) = "编译"
 EndWith 
 
 AddMapElement(Catalog(), "libcreate")
@@ -86,6 +92,7 @@ With Catalog()
   \Translate(1) = "Create library"
   \Translate(2) = "Erstelle Bibliothek"
   \Translate(3) = "Создать библиотеку" 
+  \Translate(4) = "创建库"
 EndWith 
 
 AddMapElement(Catalog(), "libshow")
@@ -94,6 +101,7 @@ With Catalog()
   \Translate(1) = "Show libraries"
   \Translate(2) = "Zeige Bibliotheken"
   \Translate(3) = "Показать библиотеки" 
+  \Translate(4) = "显示库"
 EndWith 
 
 
@@ -104,6 +112,7 @@ With Catalog()
   \Translate(1) = "View ASM source"
   \Translate(2) = "Zeige ASM Code"
   \Translate(3) = "Посмотреть ASM исходник" 
+  \Translate(4) = "查看汇编源码"
 EndWith 
 
 ;Panel : View and/or updated code DESC
@@ -113,6 +122,7 @@ With Catalog()
   \Translate(1) = "View DESC source" 
   \Translate(2) = "Zeige DESC Code"
   \Translate(3) = "Посмотреть DESC исходник" 
+  \Translate(4) = "查看DESC源码" 
 EndWith 
 
 AddMapElement(Catalog(), "save")
@@ -121,6 +131,7 @@ With Catalog()
   \Translate(1) = "Save" 
   \Translate(2) = "Speichern"
   \Translate(3) = "Сохранить" 
+  \Translate(4) = "源码" 
 EndWith 
 
 AddMapElement(Catalog(), "errorasm")
@@ -128,7 +139,8 @@ With Catalog()
   \Translate(0) = "Impossible de créer le fichier ASM."
   \Translate(1) = "Failed to create ASM file." 
   \Translate(2) = "Erstellung der ASM Datei fehlgeschlagen."
-  \Translate(3) = "Не удалось создать файл ASM."  
+  \Translate(3) = "Не удалось создать файл ASM." 
+  \Translate(4) = "创建汇编文件失败."   
 EndWith 
 
 AddMapElement(Catalog(), "successasm")
@@ -137,6 +149,7 @@ With Catalog()
   \Translate(1) = "Create description file completed."
   \Translate(2) = "Erstellung der ASM Datei."
   \Translate(3) = "Создание файла ASM."   
+  \Translate(4) = "创建汇编文件完成."
 EndWith 
 
 AddMapElement(Catalog(), "errordesc")
@@ -145,6 +158,8 @@ With Catalog()
   \Translate(1) = "Failed to create description file." 
   \Translate(2) = "Erstellung der DESC Datei fehlgeschlagen."
   \Translate(3) = "Не удалось создать файл описания." 
+  \Translate(4) = "创建描述文件失败." 
+  
 EndWith 
 
 AddMapElement(Catalog(), "successdesc")
@@ -153,6 +168,7 @@ With Catalog()
   \Translate(1) = "Create description file completed."
   \Translate(2) = "Erstellung der DESC Datei."
   \Translate(3) = "Создать файл описания."   
+  \Translate(4) = "创建描述文件完成."
 EndWith 
 
 AddMapElement(Catalog(), "libexist")
@@ -161,6 +177,8 @@ With Catalog()
   \Translate(1) = "Remove the library if it exists and restart the compiler." 
   \Translate(2) = "Ersetze die Bibliothek (falls sie existiert) und starte den Kompiler neu."
   \Translate(3) = "Удалите библиотеку, если она существует, и перезапустите компилятор." 
+  \Translate(4) = "如果此库存在则移除并重启编译器." 
+  
 EndWith 
 
 AddMapElement(Catalog(), "errorlib")
@@ -168,7 +186,8 @@ With Catalog()
   \Translate(0) = "Impossible de créer la librairie."
   \Translate(1) = "Unable to create library." 
   \Translate(2) = "Konnte Bibliothek nicht erstellen."
-  \Translate(3) = "Удалите библиотеку, если она существует, и перезапустите компилятор." 
+  \Translate(3) = "Удалите библиотеку, если она существует, и перезапустите компилятор."
+  \Translate(4) = "无法创建库."   
 EndWith 
 
 AddMapElement(Catalog(), "errorobj")
@@ -177,6 +196,7 @@ With Catalog()
   \Translate(1) = "An error occurred during the compilation of the assembler file." 
   \Translate(2) = "Beim Kompilieren der Assemblerdatei ist ein Fehler aufgetreten."
   \Translate(3) = "To be defined" 
+  \Translate(4) = "编译汇编文件期间发生错误." 
 EndWith 
 
 AddMapElement(Catalog(), "successlib")
@@ -185,6 +205,7 @@ With Catalog()
   \Translate(1) = "Create library completed."
   \Translate(2) = "Bibliothek erstellt."
   \Translate(3) = "Создание библиотеки завершена." 
+  \Translate(4) = "库创建完成."
 EndWith 
 
 AddMapElement(Catalog(), "errordelete")
@@ -193,6 +214,7 @@ With Catalog()
   \Translate(1) = "Unable to delete file"
   \Translate(2) = "Datei konnte nicht gelöscht werden"
   \Translate(3) = "Не удалось удалить файл" 
+  \Translate(4) = "无法删除文件"
 EndWith 
 
 AddMapElement(Catalog(), "logclear")
@@ -201,6 +223,7 @@ With Catalog()
   \Translate(1) = "Clear log"
   \Translate(2) = "Berricht löschen"
   \Translate(3) = "Удалить отчет" 
+  \Translate(4) = "清理日志"
 EndWith 
 
 AddMapElement(Catalog(), "logcopy")
@@ -209,6 +232,7 @@ With Catalog()
   \Translate(1) = "Copy log"
   \Translate(2) = "Berricht kopieren"
   \Translate(3) = "Копия отчета" 
+  \Translate(4) = "复制日志"
 EndWith 
 
 AddMapElement(Catalog(), "information")
@@ -217,6 +241,7 @@ With Catalog()
   \Translate(1) = "MLF : Information"
   \Translate(2) = "MLF : Informationen"
   \Translate(3) = "MLF : информация" 
+  \Translate(4) = "MLF : 信息"
 EndWith 
 
 AddMapElement(Catalog(), "residentexist")
@@ -225,6 +250,7 @@ With Catalog()
   \Translate(1) = "Confirm the deletion of the resident"
   \Translate(2) = "Bestätigen Sie das Löschen des Residenten"
   \Translate(3) = "Подтвердить удаление резидента " 
+  \Translate(4) = "确认删除"
 EndWith 
 
 Procedure InitLang(Gadget)
@@ -232,6 +258,7 @@ Procedure InitLang(Gadget)
   AddGadgetItem(Gadget, -1, "English")
   AddGadgetItem(Gadget, -1, "Deutsch")
   AddGadgetItem(Gadget, -1, "Russian")
+  AddGadgetItem(Gadget, -1, "简体中文")
   SetGadgetState(Gadget, Lang)
 EndProcedure
 
@@ -242,8 +269,7 @@ EndProcedure
 Procedure.s m(Key.s)
   ProcedureReturn Catalog(key)\Translate(Lang)
 EndProcedure
-; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 224
-; FirstLine = 189
+; IDE Options = PureBasic 5.44 LTS (Windows - x86)
+; CursorPosition = 22
 ; Folding = -
 ; EnableXP
