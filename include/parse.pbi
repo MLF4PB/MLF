@@ -320,7 +320,11 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
           ProcedureType = "Word | StdCall"
           
         Default
-          ProcedureType = "Long | StdCall"
+          If FindString(Buffer, "$")
+            ProcedureType = "String | StdCall | Unicode | Cdecl"
+          Else
+            ProcedureType = "Long | StdCall"
+          EndIf
       EndSelect
       
       ;- 3.1 Procedure without Parameter
@@ -523,7 +527,7 @@ Procedure.s Normalize(Buffer.s)
 EndProcedure
 
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 58
-; FirstLine = 55
+; CursorPosition = 326
+; FirstLine = 304
 ; Folding = ---------
 ; EnableXP
