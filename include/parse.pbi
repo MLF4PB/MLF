@@ -42,10 +42,10 @@ Declare.s Normalize(Buffer.s)
 Procedure Analyse(ASMFileName.s)
   Protected ASMContent.s, ASMCountDependancies, ASMLineStartDependancies = 7, ASMCurrentLine
   Protected DESCFileName.s, DESCContent.s, DESCHelpFileName.s = "HelpFileName" 
-  Protected Buffer.s, Token     
+  Protected Buffer.s, Token, RET4Token, JMPToken    
   Protected NewList ASMExtract.NewProcedure()
-    
-  ;- 1 Create ASM file 
+  
+  ;- 1 Create New ASM file 
   If ReadFile(0, ASMFileName) 
     
     ;- 1.0 ASM Procedures become public
@@ -53,7 +53,14 @@ Procedure Analyse(ASMFileName.s)
       Buffer = ReadString(0)
       
       If FindString(Buffer, "; procedure", 0, #PB_String_NoCase) And Not FindString(Buffer, "; procedurereturn", 0, #PB_String_NoCase)
-        Token = #True
+        Token       = #True
+        RET4Token = #False
+        JMPToken    = #False
+        If FindString(LCase(Buffer), "dll.s") Or FindString(LCase(Buffer), "dll$")
+          RET4Token = #True
+        Else
+          RET4Token = #False          
+        EndIf
         
         ;Format procedure : ProcedureDLL    StoreMessage  ( Buffer.s ) => ; ProcedureDLL StoreMessage(Buffer.s)        
         Buffer = Normalize(Buffer)
@@ -94,7 +101,25 @@ Procedure Analyse(ASMFileName.s)
         ;  ; EndProcedure
         
       Else
-        If Token = #False
+        
+        If Token = #False 
+          ;-1.0.1-BugFix RET + 4 
+          CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
+            
+            If RET4Token = #True ;This is a ProcedureDLL.s or ProcedureDLL$ 
+              If JMPToken = #True And Trim(Buffer) = "RET"
+                Buffer + " + 4"
+                RET4Token = #False
+                JMPToken = #False
+              EndIf
+                            
+              If FindString(LCase(Buffer), "; endprocedure")
+                JMPToken = #True
+              EndIf
+            EndIf
+          CompilerEndIf
+          ;End BugFix
+          
           ASMContent + Buffer + #CRLF$
         Else
           ASMExtract()\ASMName = RemoveString(Buffer, ":") ;Example _Procedure2
@@ -109,7 +134,7 @@ Procedure Analyse(ASMFileName.s)
     ForEach ASMExtract()
       ASMContent = ReplaceString(ASMContent, ASMExtract()\ASMName, "PB_" + ASMExtract()\Name)   
     Next
-        
+    
     ;- 1.2 Save new ASM file
     ConsoleLog("Save the assembler file " + ASMFileName)
     If CreateFile(0, ASMFileName)
@@ -117,6 +142,7 @@ Procedure Analyse(ASMFileName.s)
       CloseFile(0)
     EndIf  
   EndIf
+  
   
   ;-
   ;- 2 Create DESC Header
@@ -208,7 +234,6 @@ Procedure Analyse(ASMFileName.s)
           ASMExtract()\Public = #False
       EndSelect
     Next
-
     
     ;- 2.3 Extract IDE Help from PureBasic filename
     ForEach(ASMExtract())
@@ -216,7 +241,7 @@ Procedure Analyse(ASMFileName.s)
         ReadFile(0, PBFileName)    
         While Eof(0) = 0
           Buffer = ReadString(0)
-          If FindString(Buffer, "ProcedureDLL") And  FindString(Buffer, ASMExtract()\Name) 
+          If FindString(Buffer, "ProcedureDLL", 0, #PB_String_NoCase) And  FindString(Buffer, ASMExtract()\Name) 
             ProcedureHelp = Trim(StringField(Buffer, 2, ";-"))
             If ProcedureHelp = ""
               ProcedureHelp = "IDE help is not defined"
@@ -229,7 +254,7 @@ Procedure Analyse(ASMFileName.s)
         Parse(ASMExtract()\Name, ASMExtract()\Line, ASMExtract()\Help)
       EndIf      
     Next
-            
+    
     ;- 2.4 Create DESC content filename
     DESCContent = EnumHeader + Str(ASMCountDependancies) + #CRLF$ + #CRLF$ +
                   "; " + Str(ASMCountDependancies) + " Dependancies " + #CRLF$ +
@@ -254,7 +279,7 @@ EndProcedure
 
 ;-
 Procedure Parse(Name.s, Buffer.s, Help.s)  
-;- 3 Parse the parameters of each procedure
+  ;- 3 Parse the parameters of each procedure
   Protected ProcedureType.s       ;Type .s, .i, .... 
   Protected ProcedureParameters.s ;(Buffer$, Position.i
   Protected ProcedureParametersEnd.s ;]]])
@@ -266,10 +291,10 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
   ConsoleLog("- Parse : " + Buffer)
   Buffer = Mid(Buffer, 3)
   Select LCase(StringField(StringField(Buffer, 1, " "), 1, "."))
-    Case "proceduredll", "procedurecdll"
+    Case "proceduredll", "procedurecdll", "proceduredll$", "procedurecdll$"
       
       ;- 3.0 Parse procedure type
-      Select  StringField(StringField(Buffer, 1, " "), 2, ".")
+      Select  LCase(StringField(StringField(Buffer, 1, " "), 2, "."))
         Case "b"
           ProcedureType =  "Byte | StdCall"
           
@@ -281,7 +306,7 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
           
         Case "d"
           ProcedureType =  "Double | StdCall"
-             
+          
         Case "f"
           ProcedureType =  "Float | StdCall"
           
@@ -289,7 +314,7 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
           ProcedureType = "Quad | StdCall"
           
         Case "s"
-          ProcedureType = "String | StdCall | Unicode"
+          ProcedureType = "String | StdCall | Unicode | Cdecl"
           
         Case "w"
           ProcedureType = "Word | StdCall"
@@ -337,7 +362,7 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
             Parameter = Trim(StringField(Parameter, 1, "="))
             DefaultValue = #True
           EndIf
-          Select StringField(Parameter, 2, ".")
+          Select LCase(StringField(Parameter, 2, "."))
             Case "b"
               If DefaultValue
                 EnumProcedures + "[Byte], "
@@ -408,9 +433,9 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
                 Else
                   EnumProcedures + "LinkedList, "
                 EndIf
-                  
-              ;ElseIf Not FindString(ProcedureType, "none", 0, #PB_String_NoCase)
-              ;  EnumProcedures + "Long, "
+                
+                ;ElseIf Not FindString(ProcedureType, "none", 0, #PB_String_NoCase)
+                ;  EnumProcedures + "Long, "
               Else
                 If DefaultValue
                   EnumProcedures + "[Long], "
@@ -498,7 +523,7 @@ Procedure.s Normalize(Buffer.s)
 EndProcedure
 
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 336
-; FirstLine = 284
-; Folding = --------
+; CursorPosition = 58
+; FirstLine = 55
+; Folding = ---------
 ; EnableXP
