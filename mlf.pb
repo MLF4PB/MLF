@@ -77,7 +77,7 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.36 Beta"
+Global Version.s = "1.37 Beta"
 
 ;Current PureBasic file
 Global PBFileName.s, PathPart.s, FilePart.s
@@ -375,7 +375,7 @@ Procedure PBCompil()
   EndIf
   
   ;-Create ASM
-  Compiler = RunProgram(#PB_Compiler_Home + "Compilers\pbcompiler.exe", #DQUOTE$ + PBFileName + #DQUOTE$ + " /COMMENTED" , "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
+  Compiler = RunProgram(#PB_Compiler_Home + "Compilers\pbcompiler.exe", #DQUOTE$ + PBFileName + #DQUOTE$ + " /COMMENTED /UNICODE " , "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
   If Compiler
     Token = #True
     While ProgramRunning(Compiler)
@@ -400,11 +400,12 @@ Procedure PBCompil()
       
       ;if resident file, then the ASM file does not exist.
       If FileSize("PureBasic.asm") <> -1          
-        If Not RenameFile("PureBasic.asm", Filename)
+        If Not RenameFile("PureBasic.asm", Filename)          
           ConsoleLog(m("errordelete") + " " + Filename)
         Else
           ConsoleLog("Rename PureBasic.asm to " + FileName + " done." )       
-          
+                    CopyFile(FileName, "PureBasic.asm")
+
           ;Extract dependancies & procedures from ASM file and create DESC File
           ;Return Count Public Procedure 
           Analyse(FileName)
@@ -620,7 +621,7 @@ Procedure Exit()
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
 ; CursorPosition = 79
-; FirstLine = 69
+; FirstLine = 56
 ; Folding = ----------
 ; Markers = 287
 ; EnableXP
