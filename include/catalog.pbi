@@ -142,8 +142,8 @@ EndWith
 
 AddMapElement(Catalog(), "successasm")
 With Catalog()
-  \Translate(0) = "Création du fichier le description, terminée."
-  \Translate(1) = "Create description file completed."
+  \Translate(0) = "Création du fichier ASM, terminée."
+  \Translate(1) = "Create ASM file completed."
   \Translate(2) = "Erstellung der ASM Datei."
   \Translate(3) = "Создание файла ASM, завершено."   
 EndWith 
@@ -182,10 +182,10 @@ EndWith
 
 AddMapElement(Catalog(), "errorobj")
 With Catalog()
-  \Translate(0) = "Une erreur c'est produite durant la compilation du fichier assembleur."
-  \Translate(1) = "An error occurred during the compilation of the assembler file." 
-  \Translate(2) = "Beim Kompilieren der Assemblerdatei ist ein Fehler aufgetreten."
-  \Translate(3) = "Произошла ошибка во время компиляции файла ассемблера" 
+  \Translate(0) = "FASM : Une erreur c'est produite durant la compilation du fichier assembleur."
+  \Translate(1) = "FASM : An error occurred during the compilation of the assembler file." 
+  \Translate(2) = "FASM : Beim Kompilieren der Assemblerdatei ist ein Fehler aufgetreten."
+  \Translate(3) = "FASM : Произошла ошибка во время компиляции файла ассемблера" 
 EndWith 
 
 AddMapElement(Catalog(), "successlib")
@@ -252,7 +252,7 @@ Procedure.s m(Key.s)
   ProcedureReturn Catalog(key)\Translate(Lang)
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 252
-; FirstLine = 200
+; CursorPosition = 187
+; FirstLine = 156
 ; Folding = -
 ; EnableXP

@@ -107,12 +107,12 @@ Procedure Analyse(ASMFileName.s)
           CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
             
             If RET4Token = #True ;This is a ProcedureDLL.s or ProcedureDLL$ 
-              If JMPToken = #True And Trim(Buffer) = "RET"
+              If JMPToken = #True And Left(Trim(Buffer),3) = "RET"
                 Buffer + " + 4"
                 RET4Token = #False
                 JMPToken = #False
               EndIf
-                            
+              
               If FindString(LCase(Buffer), "; endprocedure")
                 JMPToken = #True
               EndIf
@@ -292,7 +292,7 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
   Buffer = Mid(Buffer, 3)
   Select LCase(StringField(StringField(Buffer, 1, " "), 1, "."))
     Case "proceduredll", "procedurecdll", "proceduredll$", "procedurecdll$"
-      
+            
       ;- 3.0 Parse procedure type
       Select  LCase(StringField(StringField(Buffer, 1, " "), 2, "."))
         Case "b"
@@ -314,14 +314,14 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
           ProcedureType = "Quad | StdCall"
           
         Case "s"
-          ProcedureType = "String | StdCall | Unicode | Cdecl"
+          ProcedureType = "String | StdCall | Unicode "
           
         Case "w"
           ProcedureType = "Word | StdCall"
           
         Default
           If FindString(Buffer, "$")
-            ProcedureType = "String | StdCall | Unicode | Cdecl"
+            ProcedureType = "String | StdCall | Unicode "
           Else
             ProcedureType = "Long | StdCall"
           EndIf
@@ -423,6 +423,23 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
                 Else
                   EnumProcedures + "String, "
                 EndIf
+                 
+              ElseIf FindString(parameter, "*")
+                ;-Upd : 15, October 2017 
+                CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
+                  If DefaultValue
+                    EnumProcedures + "[Long], "
+                  Else
+                    EnumProcedures + "Long, "
+                  EndIf
+                CompilerElse
+                  If DefaultValue
+                    EnumProcedures + "[Quad], "
+                  Else
+                    EnumProcedures + "Quad, "
+                  EndIf
+                CompilerEndIf
+                ;End Upd
                 
               ElseIf FindString(Parameter, "Array", 0, #PB_String_NoCase)
                 If DefaultValue
@@ -525,9 +542,8 @@ Procedure.s Normalize(Buffer.s)
   result = ReplaceString(result, " )", ")")
   ProcedureReturn result
 EndProcedure
-
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 326
-; FirstLine = 304
-; Folding = ---------
+; CursorPosition = 289
+; FirstLine = 274
+; Folding = ----------
 ; EnableXP
