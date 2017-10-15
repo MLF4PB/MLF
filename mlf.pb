@@ -25,6 +25,7 @@
 ; 06, October 2017   : mlf          - Add lib process folder
 ;==============================================================================
 
+
 EnableExplicit
 
 Enumeration Font
@@ -634,10 +635,9 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 80
-; FirstLine = 80
+; CursorPosition = 27
 ; Folding = ----------
-; Markers = 292
+; Markers = 293
 ; EnableXP
 ; EnableAdmin
 ; Executable = mlf.exe
