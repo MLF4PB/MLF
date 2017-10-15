@@ -56,7 +56,8 @@ Enumeration Gadget
   ;Panel 0 - Select purebasic file, compil and create user lib
   #mfPBFrame
   #mfPBCodeName
-  #mfRSEnable
+  #mfRESEnable
+  #mfThreadEnable
   #mfLog
   
   ;Panel 1 - View ASM code
@@ -77,10 +78,11 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.37 Beta"
+Global Version.s = "1.38 Beta"
 
 ;Current PureBasic file
-Global PBFileName.s, PathPart.s, FilePart.s
+Global PBFileName.s
+Global FilePart.s
 
 ;MLF Folder
 Global MLFFolder.s = GetCurrentDirectory()
@@ -153,8 +155,11 @@ Procedure Start()
   ComboBoxGadget(#mfPBCodeName, 20, 50, WindowWidth(#mf) - 45, 22)
   
   ;Optional : Create Resident
-  CheckBoxGadget(#mfRSEnable, 20, 90, 200, 24, "Create Resident")
+  CheckBoxGadget(#mfRESEnable, 20, 90, 200, 24, "Resident")
   
+  ;Optional ; ThreadSafe
+  CheckBoxGadget(#mfThreadEnable, 230, 90, 200, 24, "Thread")
+    
   ;View console log
   ListViewGadget(#mfLog, 5, 130, WindowWidth(#mf) - 15, 410)
   SetGadgetColor(#mfLog, #PB_Gadget_BackColor, RGB(169, 169, 169))
@@ -291,7 +296,6 @@ Procedure PBSelect()
   EndIf
   
   If PBFileName <> ""
-    PathPart = GetPathPart(PBFileName)
     FilePart = GetFilePart(PBFileName, #PB_FileSystem_NoExtension)
     ResetWindow()    
     
@@ -310,7 +314,7 @@ EndProcedure
 
 ;Create ASM file, Parsed and modified ASM file and create description (DESC) file
 Procedure PBCompil()
-  Protected Compiler, Buffer.s, FileName.s, Token.b
+  Protected Compiler, Buffer.s, FileName.s, Token.b, CompilParam.s, PBWorkFileName.s
   
   ;Create compilation work space
   CreateDirectory(FilePart)
@@ -337,8 +341,12 @@ Procedure PBCompil()
   ;Compile PB (Create resident if enable and ASM) 
   ConsoleLog("Waiting for compile ...")
   
+  ;PBWorkFileName = GetCurrentDirectory() + Filepart + ".pb"    
+  ;CopyFile(PBFileName, PBWorkFileName)
+  ;PBFileName = PBWorkFileName
+  
   ;-Create RESIDENT  
-  If GetGadgetState(#mfRSEnable) = #PB_Checkbox_Checked   
+  If GetGadgetState(#mfRESEnable) = #PB_Checkbox_Checked   
     ;Delete previous resident if exist
     FileName = #PB_Compiler_Home + "Residents\" + FilePart + ".res" 
     
@@ -375,7 +383,13 @@ Procedure PBCompil()
   EndIf
   
   ;-Create ASM
-  Compiler = RunProgram(#PB_Compiler_Home + "Compilers\pbcompiler.exe", #DQUOTE$ + PBFileName + #DQUOTE$ + " /COMMENTED /UNICODE " , "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
+  CompilParam = " /COMMENTED "
+  
+  If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
+    CompilParam + " /THREAD "
+  EndIf
+  
+  Compiler = RunProgram(#PB_Compiler_Home + "Compilers\pbcompiler.exe", #DQUOTE$ + PBFileName + #DQUOTE$ + CompilParam , "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
   If Compiler
     Token = #True
     While ProgramRunning(Compiler)
@@ -392,7 +406,7 @@ Procedure PBCompil()
     CloseProgram(Compiler)
     
     If Token
-      If GetGadgetState(#mfRSEnable) = #PB_Checkbox_Checked   
+      If GetGadgetState(#mfRESEnable) = #PB_Checkbox_Checked   
         CopyFile(filepart + ".res", #PB_Compiler_Home + "\Residents\" + FilePart + ".res")
       EndIf
       
@@ -620,10 +634,10 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 79
-; FirstLine = 56
+; CursorPosition = 80
+; FirstLine = 80
 ; Folding = ----------
-; Markers = 287
+; Markers = 292
 ; EnableXP
 ; EnableAdmin
 ; Executable = mlf.exe
