@@ -22,7 +22,9 @@
 ; 01, October 2017   : mlf.pb       - MLF command line File + pbcompil.b + libcreate.b 
 ; 04, October 2017   : mlf.pb       - Add Resident file creation
 ;                                   - Saved ASM file if the user changes the source
-; 06, October 2017   : mlf          - Add lib process folder
+; 06, October 2017   : mlf.pb       - Add lib process folder
+; 15, October 2017   : mlf.pb       - Add Adjust RET & Thread
+; 16, October 2017   : mlf.pb       - Add MessageRequestion when no public dll
 ;==============================================================================
 
 
@@ -59,6 +61,8 @@ Enumeration Gadget
   #mfPBCodeName
   #mfRESEnable
   #mfThreadEnable
+  #mfRETAdjustEnable
+  #mfPROCESSDeleteEnable
   #mfLog
   
   ;Panel 1 - View ASM code
@@ -79,7 +83,7 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.38 Beta"
+Global Version.s = "1.39 Beta"
 
 ;Current PureBasic file
 Global PBFileName.s
@@ -156,10 +160,18 @@ Procedure Start()
   ComboBoxGadget(#mfPBCodeName, 20, 50, WindowWidth(#mf) - 45, 22)
   
   ;Optional : Create Resident
-  CheckBoxGadget(#mfRESEnable, 20, 90, 200, 24, "Resident")
+  CheckBoxGadget(#mfRESEnable, 20, 90, 100, 24, "Resident")
   
   ;Optional ; ThreadSafe
-  CheckBoxGadget(#mfThreadEnable, 230, 90, 200, 24, "Thread")
+  CheckBoxGadget(#mfThreadEnable, 130, 90, 100, 24, "Thread")
+  
+  ;Optional ; Adjust RET
+  CheckBoxGadget(#mfRETAdjustEnable, 240, 90, 100, 24, "Adjust RET")
+  SetGadgetState(#mfRETAdjustEnable, #PB_Checkbox_Checked)   
+  
+  ;Optional ; Delete process directory
+  CheckBoxGadget(#mfPROCESSDeleteEnable, 350, 90, 200, 24, "Delete Process directory")
+  SetGadgetState(#mfPROCESSDeleteEnable, #PB_Checkbox_Checked)  
     
   ;View console log
   ListViewGadget(#mfLog, 5, 130, WindowWidth(#mf) - 15, 410)
@@ -458,9 +470,12 @@ Procedure PBCompil()
             ConsoleLog("You can view the ASM and DESC sources before create your user library")
             PlaySound(Success)
           Else
+            ;-Upd 16, October 2017 - Add MessageRequester()
             ConsoleLog("There is no public procedure.")
             ConsoleLog("User library creation disabled.")
-            PlaySound(Success)            
+            PlaySound(Success)
+            MessageRequester(m("information"), m("nopubproc") + #CRLF$ + m("userlibdisable"))
+            ;End Upd
           EndIf           
           FileDelete("purebasic.exe")
         EndIf 
@@ -523,7 +538,8 @@ Procedure MakeStaticLib()
       If ReadFile(0, "PureLibrariesMaker.log")
         While Eof(0) = 0
           ConsoleLog(ReadString(0))
-        Wend      
+        Wend    
+        CloseFile(0)
       EndIf
       ConsoleLog(m("successlib"))
       PlaySound(Success)
@@ -536,6 +552,12 @@ Procedure MakeStaticLib()
     PlaySound(Error)
   EndIf
   SetCurrentDirectory(MLFFolder)
+  
+  ;- Delete process compile files
+  If GetGadgetState(#mfPROCESSDeleteEnable) = #PB_Checkbox_Checked
+    If DeleteDirectory(FilePart, "", #PB_FileSystem_Force)
+    EndIf
+  EndIf
 EndProcedure
 
 ;Show User libraries
@@ -635,9 +657,9 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 27
+; CursorPosition = 85
 ; Folding = ----------
-; Markers = 293
+; Markers = 305
 ; EnableXP
 ; EnableAdmin
 ; Executable = mlf.exe
