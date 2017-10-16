@@ -188,12 +188,28 @@ With Catalog()
   \Translate(3) = "FASM : Произошла ошибка во время компиляции файла ассемблера" 
 EndWith 
 
-AddMapElement(Catalog(), "successlib")
+AddMapElement(Catalog(), "There is no public proceduresuccesslib")
 With Catalog()
   \Translate(0) = "Création de la librairie terminée."
   \Translate(1) = "Create library completed."
   \Translate(2) = "Bibliothek erstellt."
   \Translate(3) = "Создание библиотеки, завершено." 
+EndWith 
+
+AddMapElement(Catalog(), "nopubproc")
+With Catalog()
+  \Translate(0) = "Il n' y a pas de procédure publique."
+  \Translate(1) = "There is no public procedure."
+  \Translate(2) = "Es gibt kein öffentliches Verfahren."
+  \Translate(3) = "Тут нет общественной процедуры." 
+EndWith 
+
+AddMapElement(Catalog(), "userlibdisable")
+With Catalog()
+  \Translate(0) = "Création de bibliothèque utilisateur désactivée."
+  \Translate(1) = "User library creation disabled."
+  \Translate(2) = "Erstellung der Benutzerbibliothek deaktiviert."
+  \Translate(3) = "Отключено создание пользовательской библиотеки." 
 EndWith 
 
 AddMapElement(Catalog(), "errordelete")
@@ -252,7 +268,7 @@ Procedure.s m(Key.s)
   ProcedureReturn Catalog(key)\Translate(Lang)
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 187
-; FirstLine = 156
+; CursorPosition = 212
+; FirstLine = 153
 ; Folding = -
 ; EnableXP
