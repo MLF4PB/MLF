@@ -8,12 +8,12 @@
   <section name="data">
     <explorer view="include\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2017-10-15 19:35" user="Eric" host="FALSAM"/>
+    <lastopen date="2017-10-16 16:03" user="Eric" host="FALSAM"/>
   </section>
   <section name="files">
     <file name="include\catalog.pbi">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="dc29aa5edb737b0517c9eafa8c88e734"/>
+      <fingerprint md5="d6767c351bac6968581d526bd7f28188"/>
     </file>
     <file name="include\LockResize.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -25,11 +25,11 @@
     </file>
     <file name="include\parse.pbi">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="aa36dcdc149132ea9596133dbe751534"/>
+      <fingerprint md5="0cfcfed7bc9b9733bccee18ffc1a1936"/>
     </file>
     <file name="mlf.pb">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="4e56cfaef592ebf0f8b223b1579be790"/>
+      <fingerprint md5="181539f8f241575ec5e220209726f025"/>
     </file>
   </section>
   <section name="targets">
