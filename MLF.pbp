@@ -8,7 +8,7 @@
   <section name="data">
     <explorer view="include\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2017-10-16 16:03" user="Eric" host="FALSAM"/>
+    <lastopen date="2017-10-16 16:04" user="Eric" host="FALSAM"/>
   </section>
   <section name="files">
     <file name="include\catalog.pbi">
