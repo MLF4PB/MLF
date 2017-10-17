@@ -83,7 +83,7 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.39 Beta"
+Global Version.s = "1.40 Beta"
 
 ;Current PureBasic file
 Global PBFileName.s
@@ -329,28 +329,17 @@ EndProcedure
 Procedure PBCompil()
   Protected Compiler, Buffer.s, FileName.s, Token.b, CompilParam.s, PBWorkFileName.s
   
-  ;Create compilation work space
-  CreateDirectory(FilePart)
-  SetCurrentDirectory(FilePart)
-  
-  ;Delete previous PureBasic.exe file if exist
-  FileDelete("PureBasic.exe")
-  
-  ;Delete previous PureBasic.asm file if exist
-  FileDelete("PureBasic.asm")
-  
-  ;Delete previous PureLibrariesMaker.log if exist
-  FileDelete("PureLibrariesMaker.log")
-  
-  ;Delete YOUR previous ASM Files if exist
-  FileDelete(FilePart + ".asm")
-  
-  ;Delete previous PureBasic.desc file if exist
-  FileDelete(FilePart + ".desc")
-  
   ;Delete previous library if exist
   FileDelete(#PB_Compiler_Home + "PureLibraries\UserLibraries\" + FilePart)
   
+  ;Delete previous processs directory
+  If DeleteDirectory(FilePart, "", #PB_FileSystem_Force)
+  EndIf
+  
+  ;Create compilation work space  
+  CreateDirectory(FilePart)
+  SetCurrentDirectory(FilePart)
+    
   ;Compile PB (Create resident if enable and ASM) 
   ConsoleLog("Waiting for compile ...")
   
@@ -401,8 +390,10 @@ Procedure PBCompil()
   If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     CompilParam + " /THREAD "
   EndIf
-  
   Compiler = RunProgram(#PB_Compiler_Home + "Compilers\pbcompiler.exe", #DQUOTE$ + PBFileName + #DQUOTE$ + CompilParam , "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
+  
+  ConsoleLog(#PB_Compiler_Home + "Compilers\pbcompiler.exe" + #DQUOTE$ + PBFileName + #DQUOTE$ + CompilParam)
+  
   If Compiler
     Token = #True
     While ProgramRunning(Compiler)
@@ -506,6 +497,8 @@ Procedure OBJCreate()
     Wend
     CloseProgram(Compiler) 
     
+    CopyFile(#DQUOTE$ + #PB_Compiler_Home + "\PureLibraries\UserLibraries\"+filepart + #DQUOTE$, GetCurrentDirectory() + FilePart)
+    
     ;Create user library
     MakeStaticLib()
   EndIf
@@ -524,7 +517,7 @@ Procedure MakeStaticLib()
   Protected SourcePath.s      = #DQUOTE$ + FilePart + ".Desc" + #DQUOTE$
   Protected OBJPath.s         = FilePart + ".obj" 
   Protected DestinationPath.s = #DQUOTE$ + #PB_Compiler_Home + "PureLibraries\UserLibraries\" + #DQUOTE$
-  
+    
   If FileSize(OBJPath) <> -1 
     Compiler = RunProgram(#PB_Compiler_Home + "sdk\LibraryMaker.exe ", SourcePath + " /TO " + DestinationPath, "", #PB_Program_Open | #PB_Program_Read | #PB_Program_Hide)
     
@@ -543,13 +536,16 @@ Procedure MakeStaticLib()
       EndIf
       ConsoleLog(m("successlib"))
       PlaySound(Success)
+      MessageRequester(m("information"), m("successlib"))
     Else
       ConsoleLog(m("errorlib"))
       PlaySound(Error)
+      MessageRequester(m("information"), m("errorlib"))
     EndIf
   Else
     ConsoleLog(m("errorobj"))
     PlaySound(Error)
+    MessageRequester(m("information"), m("errorlib"))
   EndIf
   SetCurrentDirectory(MLFFolder)
   
@@ -656,10 +652,11 @@ EndProcedure
 Procedure Exit()  
   End
 EndProcedure
-; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 85
-; Folding = ----------
-; Markers = 305
+; IDE Options = PureBasic 5.61 (Windows - x64)
+; CursorPosition = 86
+; FirstLine = 72
+; Folding = -----------
+; Markers = 305,339
 ; EnableXP
 ; EnableAdmin
 ; Executable = mlf.exe
