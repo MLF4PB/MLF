@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.60 (Windows - x86)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.61 (Windows - x86)">
   <section name="config">
     <options closefiles="1" openmode="1" name="Make Library Factory (For PureBasic)"/>
     <comment>Release Alpha</comment>
@@ -8,12 +8,12 @@
   <section name="data">
     <explorer view="include\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2017-10-16 16:04" user="Eric" host="FALSAM"/>
+    <lastopen date="2017-10-17 15:24" user="Eric" host="FALSAM"/>
   </section>
   <section name="files">
     <file name="include\catalog.pbi">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="d6767c351bac6968581d526bd7f28188"/>
+      <fingerprint md5="c06ba725268630ddf0b6c9cd1f17cfb6"/>
     </file>
     <file name="include\LockResize.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
@@ -29,7 +29,7 @@
     </file>
     <file name="mlf.pb">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="181539f8f241575ec5e220209726f025"/>
+      <fingerprint md5="6466bcffdb3f278e4417a312cb9fea41"/>
     </file>
   </section>
   <section name="targets">
