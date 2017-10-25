@@ -34,12 +34,12 @@ Structure NewProcedure
   Public.b        
 EndStructure
 
-Declare   Analyse(ASMFileName.s)
+Declare   Analyse(ASMFileName.s, PBFileName.s)
 Declare   Parse(Name.s, Buffer.s, Help.s)
 Declare.s Normalize(Buffer.s)
 
 ;Analyse ASM file name
-Procedure Analyse(ASMFileName.s)
+Procedure Analyse(ASMFileName.s, PBFileName.s)
   Protected ASMContent.s, ASMCountDependancies, ASMLineStartDependancies = 7, ASMCurrentLine
   Protected DESCFileName.s, DESCContent.s, DESCHelpFileName.s = "HelpFileName" 
   Protected Buffer.s, Token, RET4Token, JMPToken    
@@ -104,6 +104,7 @@ Procedure Analyse(ASMFileName.s)
         
         If Token = #False 
           ;-1.0.1-BugFix RET + 4 
+          If GetGadgetState(#mfRETAdjustEnable) = #PB_Checkbox_Checked  
           CompilerIf #PB_Compiler_Processor = #PB_Processor_x86
             
             If RET4Token = #True ;This is a ProcedureDLL.s or ProcedureDLL$ 
@@ -118,6 +119,7 @@ Procedure Analyse(ASMFileName.s)
               EndIf
             EndIf
           CompilerEndIf
+          EndIf
           ;End BugFix
           
           ASMContent + Buffer + #CRLF$
@@ -142,8 +144,7 @@ Procedure Analyse(ASMFileName.s)
       CloseFile(0)
     EndIf  
   EndIf
-  
-  
+    
   ;-
   ;- 2 Create DESC Header
   
@@ -154,8 +155,14 @@ Procedure Analyse(ASMFileName.s)
   
   EnumHeader = "ASM" + #CRLF$   ; Langage used to code the library: ASM or C
   EnumHeader + "0" + #CRLF$     ; Number of windows DLL than the library need
-  EnumHeader + "OBJ" + #CRLF$   ; Library type (Can be OBJ or LIB).  
   
+  ; Library type (Can be OBJ or LIB).
+  If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+    EnumHeader + "LIB" + #CRLF$     
+  Else  
+    EnumHeader + "OBJ" + #CRLF$ 
+  EndIf
+ 
   EnumDependancies = ""         ; Enumeration of dependencies.
   EnumProcess = ""              ; Enumeration attach & detach process
   EnumProcedures = ""           ; Enumeration of procedures.
@@ -499,6 +506,12 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
       ProcedureType + " | Unicode"
     EndIf
     
+    ;Add flag 'Thread' if thread safe compil
+    If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+      procedureType + " | Thread"
+    EndIf
+    
+    
     ProcedureParameters + ProcedureParametersEnd + ")"
     
     EnumProcedures + ProcedureParameters + " - " + Help + #CRLF$  +
@@ -543,7 +556,7 @@ Procedure.s Normalize(Buffer.s)
   ProcedureReturn result
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 289
-; FirstLine = 274
+; CursorPosition = 512
+; FirstLine = 465
 ; Folding = ----------
 ; EnableXP
