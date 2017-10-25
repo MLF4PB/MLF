@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.61 (Windows - x86)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.60 (Windows - x86)">
   <section name="config">
     <options closefiles="1" openmode="1" name="Make Library Factory (For PureBasic)"/>
-    <comment>Release Alpha</comment>
+    <comment>Release Beta</comment>
   </section>
   <section name="data">
     <explorer view="include\" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2017-10-17 15:24" user="Eric" host="FALSAM"/>
+    <lastopen date="2017-10-25 23:46" user="Eric" host="FALSAM"/>
   </section>
   <section name="files">
     <file name="include\catalog.pbi">
@@ -25,11 +25,11 @@
     </file>
     <file name="include\parse.pbi">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
-      <fingerprint md5="0cfcfed7bc9b9733bccee18ffc1a1936"/>
+      <fingerprint md5="e7a80fdf58610d953e42082a8f2a7242"/>
     </file>
     <file name="mlf.pb">
       <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
-      <fingerprint md5="6466bcffdb3f278e4417a312cb9fea41"/>
+      <fingerprint md5="50fc49cfce99c04b909e64303f701d73"/>
     </file>
   </section>
   <section name="targets">
