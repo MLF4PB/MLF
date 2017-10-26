@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.60 (Windows - x86)">
+  <section name="config">
+    <options closefiles="1" openmode="1" name="Make Library Factory (For PureBasic)"/>
+    <comment>Release Beta</comment>
+  </section>
+  <section name="data">
+    <explorer view="include\" pattern="0"/>
+    <log show="1"/>
+    <lastopen date="2017-10-27 01:51" user="Eric" host="FALSAM"/>
+  </section>
+  <section name="files">
+    <file name="include\catalog.pbi">
+      <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="c06ba725268630ddf0b6c9cd1f17cfb6"/>
+    </file>
+    <file name="include\LockResize.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="67141c31da756e83d38d93650d323183"/>
+    </file>
+    <file name="include\media.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="fd4578fefbc17df029ffd3679399493c"/>
+    </file>
+    <file name="include\parse.pbi">
+      <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="++"/>
+      <fingerprint md5="1bfd10157b6de36dcfe6e6e4d49fc74d"/>
+    </file>
+    <file name="mlf.pb">
+      <config load="1" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="aa5c64f2f5b5bf2203a26a10fbb256b9"/>
+    </file>
+  </section>
+  <section name="targets">
+    <target name="Cible par défaut" enabled="1" default="1">
+      <inputfile value="mlf.pb"/>
+      <outputfile value=""/>
+      <executable value="..\..\Applications\MLF\MLF.exe"/>
+      <options xpskin="1" admin="1" debug="1"/>
+      <icon enable="1">purebasic.ico</icon>
+    </target>
+  </section>
+</project>
