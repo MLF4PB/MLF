@@ -157,7 +157,7 @@ Procedure Analyse(ASMFileName.s, PBFileName.s)
   EnumHeader + "0" + #CRLF$     ; Number of windows DLL than the library need
   
   ; Library type (Can be OBJ or LIB).
-  If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+  If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     EnumHeader + "LIB" + #CRLF$     
   Else  
     EnumHeader + "OBJ" + #CRLF$ 
@@ -506,12 +506,11 @@ Procedure Parse(Name.s, Buffer.s, Help.s)
       ProcedureType + " | Unicode"
     EndIf
     
-    ;Add flag 'Thread' if thread safe compil
-    If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+    ;Add flag 'Thread' if thread  compil
+    If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
       procedureType + " | Thread"
     EndIf
-    
-    
+        
     ProcedureParameters + ProcedureParametersEnd + ")"
     
     EnumProcedures + ProcedureParameters + " - " + Help + #CRLF$  +
@@ -556,7 +555,7 @@ Procedure.s Normalize(Buffer.s)
   ProcedureReturn result
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 512
-; FirstLine = 465
+; CursorPosition = 509
+; FirstLine = 501
 ; Folding = ----------
 ; EnableXP
