@@ -60,8 +60,8 @@ Enumeration Gadget
   #mfPBFrame
   #mfPBCodeName
   #mfRESEnable
-  #mfThreadEnable
   #mfThreadSafeEnable
+  #mfThreadEnable
   #mfRETAdjustEnable
   #mfPROCESSDeleteEnable
   #mfLog
@@ -84,7 +84,7 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.50 Beta"
+Global Version.s = "1.52 Beta"
 
 Structure File
   FileName.s
@@ -127,7 +127,7 @@ Declare   ThreadSelect()          ;Check if Thread or Thread Safe Compil
 Declare   PBSelect()              ;Select PureBasic file name
 Declare   PBCompil()              ;Created ASM file, Parsed and save ASM file and create description (DESC) file 
 Declare   OBJCreate()             ;Created OBJ file  
-Declare   LIBCreate()             ;Created LIB File if thread safe enable
+Declare   LIBCreate()             ;Created LIB File if thread enable
 Declare   MakeStaticLib()         ;Create User libray
 Declare   LibShowUserLib()        ;Show user library folder
 
@@ -190,12 +190,12 @@ Procedure Start()
   
   ;Optional : Create Resident
   CheckBoxGadget(#mfRESEnable, 20, 90, 80, 24, "Resident")
-  
+    
   ;Optional ; Thread
   CheckBoxGadget(#mfThreadEnable, 100, 90, 80, 24, "Thread")
-  
-  ;Optional ; ThreadSafe
-  CheckBoxGadget(#mfThreadSafeEnable, 180, 90, 80, 24, "ThreadSafe")
+    
+  ;Optional ; Thread Safe
+  CheckBoxGadget(#mfThreadSafeEnable, 180, 90, 90, 24, "Thread Safe")
   
   ;Optional ; Adjust RET
   CheckBoxGadget(#mfRETAdjustEnable, 280, 90, 100, 24, "Adjust RET")
@@ -264,8 +264,8 @@ Procedure Start()
   BindGadgetEvent(#mfASMSave, @ASMSave())           ;Save ASM file if the user changes the source  
   BindGadgetEvent(#mfDESCSave, @DESCSave())         ;Save DESC file if the user changes the source
   
-  BindGadgetEvent(#mfThreadEnable, @ThreadSelect(), #PB_EventType_LeftClick)
-  BindGadgetEvent(#mfThreadSafeEnable, @ThreadSelect(), #PB_EventType_LeftClick) 
+  BindGadgetEvent(#mfThreadSafeEnable, @ThreadSelect(), #PB_EventType_LeftClick)
+  BindGadgetEvent(#mfThreadEnable, @ThreadSelect(), #PB_EventType_LeftClick) 
   
   BindGadgetEvent(#mfLog, @LogMenu(), #PB_EventType_RightClick) ;Show menu popup
   BindGadgetEvent(#mfLibShow, @LIBShowUserLib())    ;Show user library folder
@@ -316,11 +316,11 @@ EndProcedure
 
 Procedure ThreadSelect()
   Select EventGadget()
-    Case #mfThreadEnable
-      SetGadgetState(#mfThreadSafeEnable, #PB_Checkbox_Unchecked)
-      
     Case #mfThreadSafeEnable
       SetGadgetState(#mfThreadEnable, #PB_Checkbox_Unchecked)
+      
+    Case #mfThreadEnable
+      SetGadgetState(#mfThreadSafeEnable, #PB_Checkbox_Unchecked)
       
   EndSelect
 EndProcedure
@@ -455,10 +455,9 @@ Procedure PBCompil()
   
   ;- 2.5 Create ASM 
   
-  ;- 2.5.1 Case Mode Thread
+  ;- 2.5.1 Case Mode Thread Safe
   If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     ConsoleLog("Create " + Compil\PB\FileNameThread)
-    
     ;- 2.5.1.1 Create code pb option _THREAD
     CopyFile(Compil\PB\FileName, Compil\PB\FileNameThread)
     
@@ -496,13 +495,13 @@ Procedure PBCompil()
     CompilParam = " /UNICODE /COMMENTED "
     
     ;Option Thread if check or ThreadSafe
-    If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked Or GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+    If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked Or n = 2
       CompilParam + "/THREAD " 
     EndIf
     
     ;Run compiler 
     ConsoleLog("")
-    If n = 1 ;No thread 
+    If n = 1 ;No Thread
       ConsoleLog("Waiting for compile " + Compil\PB\FileName)
       FileName = Compil\PB\FileName
     Else     ;Thread
@@ -608,10 +607,10 @@ Procedure PBCompil()
           EndIf 
         EndIf
         If n = CompilPass
-          ConsoleLog("You can view the ASM and DESC sources before create your user library")
-          PlaySound(Success)
-        EndIf
-        
+                ConsoleLog("You can view the ASM and DESC sources before create your user library")
+                PlaySound(Success)
+              EndIf
+              
       Else
         PlaySound(Error)
         MessageRequester(m("information"), Buffer)
@@ -636,7 +635,7 @@ Procedure OBJCreate()
   ;- 3 Create OBJ File
   SetCurrentDirectory(Compil\CompilDir)
   
-  ;- 3.1 Case Thread safe enable
+  ;- 3.1 Case Thread 
   If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     CompilPass = 2
   EndIf 
@@ -863,8 +862,8 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 575
-; FirstLine = 534
+; CursorPosition = 202
+; FirstLine = 193
 ; Folding = --------------
 ; Markers = 351,354,416
 ; EnableXP
