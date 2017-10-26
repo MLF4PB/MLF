@@ -455,9 +455,10 @@ Procedure PBCompil()
   
   ;- 2.5 Create ASM 
   
-  ;- 2.5.1 Case Mode Thread Safe
-  If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+  ;- 2.5.1 Case Mode Thread
+  If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     ConsoleLog("Create " + Compil\PB\FileNameThread)
+    
     ;- 2.5.1.1 Create code pb option _THREAD
     CopyFile(Compil\PB\FileName, Compil\PB\FileNameThread)
     
@@ -495,13 +496,13 @@ Procedure PBCompil()
     CompilParam = " /UNICODE /COMMENTED "
     
     ;Option Thread if check or ThreadSafe
-    If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked Or n = 2
+    If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked Or GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
       CompilParam + "/THREAD " 
     EndIf
     
     ;Run compiler 
     ConsoleLog("")
-    If n = 1 ;No Thread
+    If n = 1 ;No thread 
       ConsoleLog("Waiting for compile " + Compil\PB\FileName)
       FileName = Compil\PB\FileName
     Else     ;Thread
@@ -607,10 +608,10 @@ Procedure PBCompil()
           EndIf 
         EndIf
         If n = CompilPass
-                ConsoleLog("You can view the ASM and DESC sources before create your user library")
-                PlaySound(Success)
-              EndIf
-              
+          ConsoleLog("You can view the ASM and DESC sources before create your user library")
+          PlaySound(Success)
+        EndIf
+        
       Else
         PlaySound(Error)
         MessageRequester(m("information"), Buffer)
@@ -636,7 +637,7 @@ Procedure OBJCreate()
   SetCurrentDirectory(Compil\CompilDir)
   
   ;- 3.1 Case Thread safe enable
-  If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+  If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     CompilPass = 2
   EndIf 
   
@@ -668,7 +669,7 @@ Procedure OBJCreate()
   ConsoleLog("Create user library ...")
 
   ;- 3.3 Create LIB -> LIBCreate()
-  If GetGadgetState(#mfThreadSafeEnable) = #PB_Checkbox_Checked
+  If GetGadgetState(#mfThreadEnable) = #PB_Checkbox_Checked
     LIBCreate()  
   EndIf
   
@@ -679,7 +680,7 @@ EndProcedure
 ;-
 Procedure LIBCreate()
   Protected Compiler, Buffer.s
-  ;- 4 Create lib file if thread safe compil 
+  ;- 4 Create lib file if thread compil 
   ;  Thanks to G-Rom for his help
   Compiler = RunProgram(CompilLIB, " /OUT:" + Compil\LIB\FileName + " " + Compil\OBJ\FileName + " " + Compil\OBJ\FileNameThread, "", CompilFlag)
   
@@ -862,8 +863,8 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 644
-; FirstLine = 634
+; CursorPosition = 575
+; FirstLine = 534
 ; Folding = --------------
 ; Markers = 351,354,416
 ; EnableXP
