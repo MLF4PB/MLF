@@ -84,7 +84,7 @@ EndEnumeration
 
 ;Version
 Global Title.s = "MLF"
-Global Version.s = "1.52 Beta"
+Global Version.s = "1.51 Beta"
 
 Structure File
   FileName.s
@@ -862,8 +862,8 @@ Procedure Exit()
   End
 EndProcedure
 ; IDE Options = PureBasic 5.60 (Windows - x86)
-; CursorPosition = 202
-; FirstLine = 193
+; CursorPosition = 86
+; FirstLine = 63
 ; Folding = --------------
 ; Markers = 351,354,416
 ; EnableXP
